@@ -37,6 +37,15 @@ Note: if your amon instance lives at an address other than `127.0.0.1:2464` you 
   (with-amon {:data '(Hello world)} println "Hello world."))
 ```
 
+Amon will fail silently if the amon host is not available.  If you need different behavior you can bind *amon-throws-exceptions* to true.
+
+```clojure
+;; will raise an exception due to logging failure
+(binding [*amon-host* "amon.badhost.fake"
+          *amon-throws-exceptions* true] 
+  (with-amon {:data '(Hello world)} println "Hello world."))
+```
+
 ## License
 
 Copyright (C) 2012
