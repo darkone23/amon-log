@@ -1,4 +1,4 @@
-(defproject amon-log "0.1.0"
+(defproject amon-log "0.1.1"
   :description "A simple client to log data structures and exceptions to amon"
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [cheshire "4.0.0"]

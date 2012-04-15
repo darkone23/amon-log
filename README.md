@@ -4,7 +4,7 @@ A simple [amon](http://amon.cx) client in clojure, uses [chesire](http://github.
 
 ## Usage
 
-Add `[amon-log "0.1.0"]` to your project.clj file under `:dependencies` and run `lein deps`.
+Add `[amon-log "0.1.1"]` to your project.clj file under `:dependencies` and run `lein deps`.
 
 To send the data directly to amon, use `to-amon`.  You must provide a hashmap containing a clojure structure to be logged named `:data` and optionally a vector of classification keywords named `:tags`.
 
@@ -29,6 +29,29 @@ You can also wrap your function with a log to retain a single clojure form.
 ;; returns 3, and logs "Im adding numbers together!" with the tags of "math" and "simple".
 ```
 
+You can log your exceptions with `exception-to-amon`.  By default it will include the stacktrace, the error class, a timestamp and the exception message.  
+
+You can optionally give amon richer error context by providing a hashmap containing any clojure data structure that can be converted to json.
+
+```clojure
+(require '[amon-log.core :as log])
+
+;; (log/exception-to-amon my-exception)
+;; (log/exception-to-amon my-exception my-hashmap)
+(defn divide-with-amon
+  [numerator denominator]
+    (try 
+      (/ numerator denominator) 
+      (catch Exception e 
+        (do
+          (log/exception-to-amon e {:context "Caused by 'divide-with-amon'" 
+                                    :args [numerator, denominator])
+          (handle-exception e)))))
+
+(divide-with-amon 10 5) ; returns 2
+(divide-with-amon 10 0) ; logs the error to amon and passes the exception to 'handle-error'
+```
+
 Note: if your amon instance lives at an address other than `127.0.0.1:2464` you can change it by binding the `*amon-host*` var.
 
 ```clojure
@@ -45,6 +68,10 @@ Amon will fail silently if the amon host is not available.  If you need differen
           *amon-throws-exceptions* true] 
   (with-amon {:data '(Hello world)} println "Hello world."))
 ```
+
+## TODO
+
+Add functionality to wrap an exception class with amon logging
 
 ## License
 
