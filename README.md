@@ -1,6 +1,6 @@
 # amon-log
 
-A simple [amon](http://amon.cx) client in clojure, uses [chesire](http://github.com/dakrone/cheshire) to convert data structures to json and [clj-http](http://github.com/dakrone/clj-http) to hit amon's api; supports tagging functionality to associate logged data into groups.
+A simple [amon](https://github.com/martinrusev/amon) client in clojure, uses [chesire](https://github.com/dakrone/cheshire) to convert data structures to json and [clj-http](https://github.com/dakrone/clj-http) to hit amon's api; supports tagging functionality to associate logged data into groups.
 
 ## Usage
 
@@ -45,8 +45,8 @@ You can optionally give amon richer error context by providing a hashmap contain
       (catch Exception e 
         (do
           (log/exception-to-amon e {:context "Caused by 'divide-with-amon'" 
-                                    :args [numerator, denominator])
-          (handle-exception e)))))
+                                    :args [numerator, denominator]})
+          (your-own-handler e)))))
 
 (divide-with-amon 10 5) ; returns 2
 (divide-with-amon 10 0) ; logs the error to amon and passes the exception to 'handle-error'
@@ -71,7 +71,7 @@ Amon will fail silently if the amon host is not available.  If you need differen
 
 ## TODO
 
-Add functionality to wrap an exception class with amon logging
+Add functionality to wrap (i.e. extend) an exception class with amon logging
 
 ## License
 
