@@ -4,8 +4,9 @@
 
 (def ^:dynamic *amon-host* "127.0.0.1:2464")
 (def ^:dynamic *amon-throws-exceptions* false)
+(def ^:dynamic *amon-secret-key* nil)
 
-(def api-url #(str "http://" *amon-host* "/api/" %))
+(def api-url #(str "http://" *amon-host* "/api/" % (when *amon-secret-key* (str "/" *amon-secret-key*))))
 
 (defn current-time []
   (long (. (java.util.Date.) getTime)))
